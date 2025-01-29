@@ -34,7 +34,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion  = "1.5.0"
+        kotlinCompilerExtensionVersion = "1.5.0"
     }
 }
 
@@ -55,10 +55,11 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.material3.android)
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.hilt.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.coil.compose)
     implementation(libs.gson)
+    implementation(libs.koin.android)
+    implementation(libs.insert.koin.koin.androidx.compose)
 }

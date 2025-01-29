@@ -4,9 +4,7 @@ import com.sashamprog.carhub.domain.model.User
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class CarHubApiImpl constructor(
-    private val api: CarHubApi
-) {
+class CarHubApiImpl(private val api: CarHubApi) {
 
     // Use Flow to expose API results asynchronously
     fun getUser(): Flow<User> = flow {

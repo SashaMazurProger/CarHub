@@ -21,10 +21,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun AuthScreen(navController: NavController) {
-    val viewModel: AuthViewModel = viewModel()
+    val viewModel: AuthViewModel = koinViewModel()
     val authState by viewModel.authState.collectAsState()
 
     var email by remember { mutableStateOf("test") }

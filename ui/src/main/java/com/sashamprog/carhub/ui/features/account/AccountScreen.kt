@@ -37,13 +37,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun AccountScreen(navController: NavController) {
-    val viewModel: AccountViewModel = viewModel()
+    val viewModel: AccountViewModel = koinViewModel()
     val user by viewModel.user.collectAsState()
     var nicknameEditable by remember { mutableStateOf(false) }
     var editableNickname by remember { mutableStateOf(user.nickname) }

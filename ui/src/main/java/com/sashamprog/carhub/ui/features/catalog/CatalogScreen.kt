@@ -29,7 +29,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -37,6 +36,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.sashamprog.carhub.domain.model.Car
 import com.sashamprog.carhub.ui.features.car_details.CarDetailsScreen
+import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
@@ -63,7 +63,7 @@ fun CatalogNavGraph() {
 
 @Composable
 fun CatalogScreen(navController: NavController) {
-    val viewModel: CatalogViewModel = viewModel()
+    val viewModel: CatalogViewModel = koinViewModel()
     val catalogState by viewModel.catalogState.collectAsState()
 
 

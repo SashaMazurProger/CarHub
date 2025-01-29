@@ -7,9 +7,9 @@ import com.sashamprog.carhub.domain.repository.UserRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import javax.inject.Inject
 
-class UserRepositoryImpl @Inject constructor(private val carHubApi: CarHubApiImpl) : UserRepository {
+class UserRepositoryImpl(private val carHubApi: CarHubApiImpl) : UserRepository {
+
     override fun login(email: String, password: String): Flow<AuthResult> = flow {
         delay(2000) //todo Імітація мережевого запиту
 
