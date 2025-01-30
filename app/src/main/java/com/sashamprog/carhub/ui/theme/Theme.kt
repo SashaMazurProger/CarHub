@@ -12,28 +12,32 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = Color(0xFF4878F6),  // основний колір #4878F6
+    secondary = Color(0xFFB5C3E2),  // додатковий колір #B5C3E2
+    tertiary = Color(0xFF1D1D1D),  // третинний колір #1D1D1D
+    background = Color(0xFF101010),  // фон #101010
+    surface = Color(0xFF1D1D1D),  // поверхня #1D1D1D
+    onPrimary = Color.White,  // текст на основному кольорі
+    onSecondary = Color(0xFF101010),  // текст на другорядному кольорі
+    onBackground = Color(0xFFF0F1F3),  // текст на фоні #F0F1F3
+    onSurface = Color(0xFFF0F1F3),  // текст на поверхні
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40,
-    background = Color(0xFF3F51B5),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFFFFFFFF),
-    onSurface = Color(0xFF1C1B1F),
+    primary = Color(0xFF4878F6),  // основний колір #4878F6
+    secondary = Color(0xFFB5C3E2),  // додатковий колір #B5C3E2
+    tertiary = Color(0xFF101010),  // третинний колір #101010
+    background = Color(0xFFF0F1F3),  // фон #F0F1F3
+    surface = Color(0xFFFFFFFF),  // поверхня біла
+    onPrimary = Color.White,  // текст на основному кольорі
+    onSecondary = Color(0xFF101010),  // текст на другорядному кольорі
+    onBackground = Color(0xFF1D1D1D),  // текст на фоні #1D1D1D
+    onSurface = Color(0xFF101010),  // текст на поверхні
 )
 
 @Composable
 fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {

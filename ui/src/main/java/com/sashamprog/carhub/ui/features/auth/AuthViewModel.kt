@@ -34,7 +34,6 @@ class AuthViewModel(private val loginUseCase: LoginUseCase) :
 
         // Simulate network delay
         viewModelScope.launch {
-            delay(2000) //todo
             loginUseCase.login(email, password).collect {
                 if (it is AuthResult.Success) {
                     _authState.value = AuthState.Success

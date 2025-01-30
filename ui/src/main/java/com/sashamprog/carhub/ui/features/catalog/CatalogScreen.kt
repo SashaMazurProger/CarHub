@@ -20,7 +20,6 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -33,6 +32,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.sashamprog.carhub.domain.model.Car
 import com.sashamprog.carhub.ui.features.car_details.CarDetailsScreen
@@ -49,7 +49,7 @@ fun CatalogNavGraph() {
         composable(route = "carDetails") {
             val car = navController.previousBackStackEntry?.savedStateHandle?.get<Car>("car")
             car?.let {
-                CarDetailsScreen(navController,it)
+                CarDetailsScreen(navController, it)
             }
         }
         composable(route = "editCar") {
@@ -67,9 +67,7 @@ fun CatalogScreen(navController: NavController) {
     val catalogState by viewModel.catalogState.collectAsState()
 
 
-    Scaffold(topBar = {
-        TopAppBar(title = { Text("Автомобілі на продаж") })
-    }) { paddingValues ->
+    Scaffold { paddingValues ->
 
         when (catalogState) {
             is CatalogState.Loading -> CircularProgressIndicator()
@@ -105,23 +103,15 @@ fun CarItem(car: Car, onCarClick: () -> Unit) {
         elevation = 4.dp,
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Row(
+            AsyncImage(
+                model = car.imageUrl,
+                contentDescription = null,
                 modifier = Modifier
+                    .height(200.dp)
                     .fillMaxWidth()
                     .padding(top = 8.dp),
-                horizontalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                car.imageUrls.take(3).forEach { imageUrl -> // Показуємо максимум 3 зображення
-                    Image(
-                        painter = rememberAsyncImagePainter(imageUrl),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .height(200.dp)
-                            .fillMaxWidth(),
-                        contentScale = ContentScale.Crop
-                    )
-                }
-            }
+                contentScale = ContentScale.Crop
+            )
 
             Text(
                 text = "${car.make} ${car.model}",

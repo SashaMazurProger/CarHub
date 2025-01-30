@@ -17,9 +17,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -42,7 +44,7 @@ import coil.compose.rememberAsyncImagePainter
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun AccountScreen(navController: NavController) {
+fun AccountScreen(appController: NavController) {
     val viewModel: AccountViewModel = koinViewModel()
     val user by viewModel.user.collectAsState()
     var nicknameEditable by remember { mutableStateOf(false) }
@@ -52,7 +54,7 @@ fun AccountScreen(navController: NavController) {
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult = { uri: Uri? ->
             uri?.let {
-                val newAvatarUrl = uri.toString() // Convert to URL or upload to server
+                val newAvatarUrl = uri.toString()
                 viewModel.updateAvatar(newAvatarUrl)
             }
         }
@@ -66,12 +68,12 @@ fun AccountScreen(navController: NavController) {
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
-        // Avatar Section
         Box(
             modifier = Modifier
-                .size(120.dp)
+                .size(160.dp)
                 .clip(CircleShape)
                 .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f))
         ) {
@@ -90,15 +92,26 @@ fun AccountScreen(navController: NavController) {
                     imageVector = Icons.Default.AccountCircle,
                     contentDescription = "Default Avatar",
                     modifier = Modifier
-                        .size(100.dp)
+                        .fillMaxSize()
                         .clickable { onEditAvatar() },
                     tint = MaterialTheme.colorScheme.primary
                 )
             }
+
+            Icon(
+                imageVector = Icons.Default.Edit,
+                contentDescription = "Edit Avatar",
+                modifier = Modifier
+                    .size(32.dp)
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 8.dp)
+                    .clickable { onEditAvatar() },
+                tint = MaterialTheme.colorScheme.onPrimary
+            )
         }
+
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Nickname Section
         if (nicknameEditable) {
             OutlinedTextField(
                 value = editableNickname,
@@ -113,7 +126,7 @@ fun AccountScreen(navController: NavController) {
             ) {
                 Button(onClick = {
                     nicknameEditable = false
-                    editableNickname = user.nickname // Reset to original
+                    editableNickname = user.nickname
                 }) {
                     Text("Cancel")
                 }
@@ -125,19 +138,35 @@ fun AccountScreen(navController: NavController) {
                 }
             }
         } else {
-            Text(
-                text = user.nickname,
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.clickable { nicknameEditable = true }
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { nicknameEditable = true }
+            ) {
+                Text(
+                    text = user.nickname,
+                    style = MaterialTheme.typography.titleLarge
+                )
+
+                Icon(
+                    imageVector = Icons.Default.Edit,
+                    contentDescription = "Edit Nickname",
+                    modifier = Modifier
+                        .size(32.dp)
+                        .padding(start = 8.dp),
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            }
         }
+
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Logout Button
         Button(
             onClick = {
                 viewModel.logout()
-                navController.navigate("login") {
+                appController.navigate("auth") {
                     popUpTo(0) // Clear back stack
                 }
             },

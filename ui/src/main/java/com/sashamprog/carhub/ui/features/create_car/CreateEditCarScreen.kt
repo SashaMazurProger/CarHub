@@ -1,15 +1,17 @@
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -29,23 +31,35 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.sashamprog.carhub.domain.model.Car
+import com.sashamprog.carhub.ui.features.create_car.CreateEditCarViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun CreateEditCarScreen(
     navController: NavController,
-    car: Car? = null // Pass the car object if editing
+    editCar: Car? = null
 ) {
-    var make by remember { mutableStateOf(car?.make ?: "") }
-    var model by remember { mutableStateOf(car?.model ?: "") }
-    var year by remember { mutableStateOf(car?.year?.toString() ?: "") }
-    var mileage by remember { mutableStateOf(car?.mileage?.toString() ?: "") }
-    var description by remember { mutableStateOf(car?.description ?: "") }
-    var imageUrls by remember { mutableStateOf(car?.imageUrls?.toMutableList() ?: mutableListOf()) }
+    val viewModel: CreateEditCarViewModel = koinViewModel()
+    var make by remember { mutableStateOf(editCar?.make ?: "") }
+    var model by remember { mutableStateOf(editCar?.model ?: "") }
+    var year by remember { mutableStateOf(editCar?.year?.toString() ?: "") }
+    var mileage by remember { mutableStateOf(editCar?.mileage?.toString() ?: "") }
+    var description by remember { mutableStateOf(editCar?.description ?: "") }
+    var imageUri by remember { mutableStateOf(editCar?.imageUrl) }
+
+    val imagePickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        if (uri != null) {
+            imageUri = uri.toString()
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -87,38 +101,39 @@ fun CreateEditCarScreen(
         )
 
         Text(text = "Images", style = MaterialTheme.typography.titleMedium)
-        LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            items(items = imageUrls) { url ->
-                Box(modifier = Modifier.size(100.dp)) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(100.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(MaterialTheme.colorScheme.surface),
+                contentAlignment = Alignment.Center
+            ) {
+                if (imageUri != null) {
                     Image(
-                        painter = rememberAsyncImagePainter(url),
+                        painter = rememberAsyncImagePainter(imageUri),
                         contentDescription = null,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .clip(RoundedCornerShape(8.dp))
+                        modifier = Modifier.fillMaxSize()
                     )
                     IconButton(
-                        onClick = { imageUrls.remove(url) },
+                        onClick = { imageUri = null },
                         modifier = Modifier.align(Alignment.TopEnd)
                     ) {
                         Icon(Icons.Default.Delete, contentDescription = "Delete Image")
                     }
-                }
-            }
-            item {
-                IconButton(
-                    onClick = {
-                        // Logic to attach an image (e.g., open image picker)
-                        imageUrls.add("https://your-placeholder-image-url.com")
-
-
-                    },
-                    modifier = Modifier
-                        .size(100.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(MaterialTheme.colorScheme.surface)
-                ) {
-                    Icon(Icons.Default.Add, contentDescription = "Add Image")
+                } else {
+                    IconButton(
+                        onClick = { imagePickerLauncher.launch("image/*") },
+                        modifier = Modifier
+                            .size(100.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(MaterialTheme.colorScheme.surface)
+                    ) {
+                        Icon(Icons.Default.Add, contentDescription = "Add Image")
+                    }
                 }
             }
         }
@@ -126,21 +141,26 @@ fun CreateEditCarScreen(
         Spacer(modifier = Modifier.weight(1f))
         Button(
             onClick = {
-                // Handle save logic here
                 val newCar = Car(
                     make = make,
                     model = model,
                     year = year.toIntOrNull() ?: 0,
                     mileage = mileage.toIntOrNull() ?: 0,
                     description = description,
-                    imageUrls = imageUrls
+                    imageUrl = imageUri ?: ""
                 )
-                // Navigate back after saving
-                navController.popBackStack()
+                viewModel.saveCar(editCar, newCar)
+                if (editCar != null) {
+                    navController.popBackStack()
+                    navController.navigate("")
+                } else {
+                    navController.popBackStack()
+                    navController.navigate("add_car")
+                }
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(text = if (car == null) "Add Car" else "Save Changes")
+            Text(text = if (editCar == null) "Add Car" else "Save Changes")
         }
     }
 }

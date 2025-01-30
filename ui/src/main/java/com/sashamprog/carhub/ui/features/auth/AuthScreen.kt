@@ -19,16 +19,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun AuthScreen(navController: NavController) {
+fun AuthScreen(appController: NavController) {
     val viewModel: AuthViewModel = koinViewModel()
     val authState by viewModel.authState.collectAsState()
 
-    var email by remember { mutableStateOf("test") }
+    var email by remember { mutableStateOf("test@mail.com") }
     var password by remember { mutableStateOf("test") }
 
     Column(
@@ -66,7 +65,9 @@ fun AuthScreen(navController: NavController) {
             is AuthState.Loading -> Text("Loading...")
             is AuthState.Error -> Text("Error: ${(authState as AuthState.Error).message}")
             is AuthState.Success -> {
-                navController.navigate("main")
+                appController.navigate("main") {
+                    popUpTo(0)
+                }
             }
 
             else -> {}

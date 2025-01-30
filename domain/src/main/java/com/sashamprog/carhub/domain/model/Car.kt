@@ -5,8 +5,10 @@ import java.io.Serializable
 data class Car(
     val make: String,
     val model: String,
-    val imageUrls: List<String>, // Список URL зображень
+    val imageUrl: String,
     val year: Int,
     val mileage: Int,
     val description: String
-) : Serializable
+) : Serializable {
+    val id: String get() = make + model
+}

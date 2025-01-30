@@ -15,18 +15,18 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val navController = rememberNavController()
+            val appNavController = rememberNavController()
             AppTheme {
-                AppNavigation(navController)
+                AppNavigation(appNavController)
             }
         }
     }
 }
 
 @Composable
-fun AppNavigation(navController: NavHostController) {
-    NavHost(navController, startDestination = "main") {
-        composable("auth") { AuthScreen(navController) }
-        composable("main") { MainScreen() }
+fun AppNavigation(appNavController: NavHostController) {
+    NavHost(appNavController, startDestination = "main") {
+        composable("auth") { AuthScreen(appNavController) }
+        composable("main") { MainScreen(appNavController) }
     }
 }
