@@ -48,6 +48,7 @@ fun CreateEditCarScreen(
     val viewModel: CreateEditCarViewModel = koinViewModel()
     var make by remember { mutableStateOf(editCar?.make ?: "") }
     var model by remember { mutableStateOf(editCar?.model ?: "") }
+    var price by remember { mutableStateOf(editCar?.price?.toString() ?: "") }
     var year by remember { mutableStateOf(editCar?.year?.toString() ?: "") }
     var mileage by remember { mutableStateOf(editCar?.mileage?.toString() ?: "") }
     var description by remember { mutableStateOf(editCar?.description ?: "") }
@@ -77,6 +78,13 @@ fun CreateEditCarScreen(
             value = model,
             onValueChange = { model = it },
             label = { Text("Model") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        TextField(
+            value = price,
+            onValueChange = { price = it },
+            label = { Text("Price") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.fillMaxWidth()
         )
         TextField(
@@ -139,11 +147,13 @@ fun CreateEditCarScreen(
         }
 
         Spacer(modifier = Modifier.weight(1f))
+
         Button(
             onClick = {
                 val newCar = Car(
                     make = make,
                     model = model,
+                    price = price.toDoubleOrNull() ?: 0.0,
                     year = year.toIntOrNull() ?: 0,
                     mileage = mileage.toIntOrNull() ?: 0,
                     description = description,

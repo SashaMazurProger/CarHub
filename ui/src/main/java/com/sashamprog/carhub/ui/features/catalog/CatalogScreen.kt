@@ -35,6 +35,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.sashamprog.carhub.domain.model.Car
+import com.sashamprog.carhub.domain.model.formatPrice
 import com.sashamprog.carhub.ui.features.car_details.CarDetailsScreen
 import org.koin.androidx.compose.koinViewModel
 
@@ -118,6 +119,7 @@ fun CarItem(car: Car, onCarClick: () -> Unit) {
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.h6
             )
+            Text(text = formatPrice(car.price), style = MaterialTheme.typography.body1)
             Text(text = "Рік випуску: ${car.year}", style = MaterialTheme.typography.body1)
             Text(text = "Пробіг: ${car.mileage} км", style = MaterialTheme.typography.body1)
             Text(

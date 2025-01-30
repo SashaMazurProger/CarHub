@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.sashamprog.carhub.domain.model.Car
+import com.sashamprog.carhub.domain.model.formatPrice
 
 @Composable
 fun CarDetailsScreen(navController: NavHostController, car: Car) {
@@ -48,11 +49,15 @@ fun CarDetailsScreen(navController: NavHostController, car: Car) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Інформація про машину
         Text(
             text = "${car.make} ${car.model}",
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = formatPrice(car.price),
+            style = MaterialTheme.typography.bodyLarge
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
