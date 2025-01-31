@@ -38,13 +38,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun AccountScreen(appController: NavController) {
+fun AccountScreen(appController: NavController, onSignedOut: () -> Unit) {
     val viewModel: AccountViewModel = koinViewModel()
     val user by viewModel.user.collectAsState()
     var nicknameEditable by remember { mutableStateOf(false) }
@@ -166,9 +167,7 @@ fun AccountScreen(appController: NavController) {
         Button(
             onClick = {
                 viewModel.logout()
-                appController.navigate("auth") {
-                    popUpTo(0) // Clear back stack
-                }
+                onSignedOut()
             },
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)

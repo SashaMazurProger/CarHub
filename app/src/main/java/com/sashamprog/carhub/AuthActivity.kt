@@ -8,38 +8,29 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.sashamprog.carhub.ui.features.auth.AuthScreen
 import com.sashamprog.carhub.ui.features.auth.AuthViewModel
 import com.sashamprog.carhub.ui.theme.AppTheme
-import org.koin.androidx.compose.koinViewModel
 
-class MainActivity : ComponentActivity() {
+class AuthActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            SplashScreen()
-        }
-    }
-
-    @Composable
-    private fun SplashScreen() {
-        val viewModel: AuthViewModel = koinViewModel()
-        val loggedInState by viewModel.isLoggedIn.collectAsState()
-
-        LaunchedEffect(loggedInState) {
-            if (!loggedInState) navigateAuth()
-        }
-
-        if (loggedInState) {
             val appNavController = rememberNavController()
             AppTheme {
-                MainScreen(appNavController, ::navigateAuth)
+                AuthScreen(appNavController, ::onSuccessAuth)
             }
         }
     }
 
-    private fun navigateAuth() {
-        startActivity(Intent(this, AuthActivity::class.java))
+    private fun onSuccessAuth() {
+        startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
 }
+

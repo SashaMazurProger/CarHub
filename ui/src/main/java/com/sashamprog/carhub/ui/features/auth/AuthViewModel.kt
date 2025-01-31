@@ -24,6 +24,9 @@ class AuthViewModel(private val loginUseCase: LoginUseCase) :
     private val _authState = MutableStateFlow<AuthState>(AuthState.Idle)
     val authState: StateFlow<AuthState> = _authState
 
+    private val _isLoggedIn = MutableStateFlow(loginUseCase.isLoggedIn())
+    val isLoggedIn: StateFlow<Boolean> = _isLoggedIn
+
     fun login(email: String, password: String) {
         if (email.isBlank() || password.isBlank()) {
             _authState.value = AuthState.Error("Please fill in both fields")

@@ -1,6 +1,8 @@
 package com.sashamprog.carhub
 
 import CreateEditCarScreen
+import android.content.Intent
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
@@ -15,6 +17,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -26,7 +30,7 @@ import com.sashamprog.carhub.ui.features.catalog.CatalogNavGraph
 
 
 @Composable
-fun MainScreen(appNavController: NavHostController) {
+fun MainScreen(appNavController: NavHostController, onSignedOut: () -> Unit) {
     val bottomNavController = rememberNavController()
     Scaffold(
         bottomBar = { BottomNavigationBar(bottomNavController) }
@@ -34,7 +38,8 @@ fun MainScreen(appNavController: NavHostController) {
         BottomNavigationGraph(
             bottomController = bottomNavController,
             appController = appNavController,
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.padding(innerPadding),
+            onSignedOut = onSignedOut
         )
     }
 }
@@ -80,12 +85,15 @@ sealed class BottomNavItem(val route: String, val title: String, val icon: Image
 fun BottomNavigationGraph(
     bottomController: NavHostController,
     appController: NavHostController,
-    modifier: Modifier
+    modifier: Modifier,
+    onSignedOut: () -> Unit
 ) {
     NavHost(bottomController, startDestination = BottomNavItem.Catalog.route, modifier) {
         composable(BottomNavItem.Catalog.route) { CatalogNavGraph() }
         composable(BottomNavItem.AddCar.route) { CreateEditCarScreen(bottomController) }
-        composable(BottomNavItem.Account.route) { AccountScreen(appController) }
+        composable(BottomNavItem.Account.route) {
+            AccountScreen(appController, onSignedOut)
+        }
     }
 }
 

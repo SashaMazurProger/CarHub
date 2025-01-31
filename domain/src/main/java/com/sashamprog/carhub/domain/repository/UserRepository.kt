@@ -11,4 +11,5 @@ interface UserRepository {
     suspend fun updateAvatar(newAvatarUrl: String): Flow<Unit>
     suspend fun updateNickname(newNickname: String): Flow<Unit>
     suspend fun logout()
+    fun isLoggedIn(): Boolean
 }
