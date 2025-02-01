@@ -16,15 +16,21 @@ class LocalUserDataSourceImpl(private val sharedPreferences: SharedPreferences) 
         delay(2000)
         if (email == "test@mail.com" && password == "test") {
             sharedPreferences.edit().putString(NICKNAME_KEY, email).apply()
-            emit(AuthResult.Success)
+            emit(AuthResult.Success("token"))
         } else {
             emit(AuthResult.Error("Invalid credentials"))
         }
     }
 
+    override fun register(email: String, password: String): Flow<AuthResult> = flow {
+        delay(2000)
+        sharedPreferences.edit().putString(NICKNAME_KEY, email).apply()
+        emit(AuthResult.Success("token"))
+    }
+
     override suspend fun getUser(): Flow<User> = flow {
         val avatarUrl = sharedPreferences.getString(AVATAR_URL_KEY, "") ?: ""
-        val nickname = sharedPreferences.getString(NICKNAME_KEY, "Nickname") ?: ""
+        val nickname = sharedPreferences.getString(NICKNAME_KEY, "test@mail.com") ?: "test@mail.com"
         emit(User(avatarUrl, nickname))
     }
 

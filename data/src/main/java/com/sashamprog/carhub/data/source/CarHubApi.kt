@@ -16,6 +16,9 @@ interface CarHubApi {
     @GET("login")
     fun login(email: String, password: String): Response<AuthResult>
 
+    @GET("register")
+    fun register(email: String, password: String): Response<AuthResult>
+
     @GET("user")
     suspend fun getUser(): Response<UserResponse>
 

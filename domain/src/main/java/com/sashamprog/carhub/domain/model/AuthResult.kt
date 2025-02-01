@@ -1,6 +1,6 @@
 package com.sashamprog.carhub.domain.model
 
 sealed class AuthResult {
-    object Success : AuthResult()
+    data class Success(val token: String) : AuthResult()
     data class Error(val message: String) : AuthResult()
 }

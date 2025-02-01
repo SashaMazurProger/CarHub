@@ -22,6 +22,14 @@ class UserRepositoryImpl(
         }
     }
 
+    override fun register(email: String, password: String): Flow<AuthResult> {
+        return userDataSource.register(email, password).onEach {
+            if (it is AuthResult.Success) {
+                sharedPreferences.edit().putBoolean("isLoggedIn", true).apply()
+            }
+        }
+    }
+
     override suspend fun getUser(): Flow<User> {
         return userDataSource.getUser()
     }

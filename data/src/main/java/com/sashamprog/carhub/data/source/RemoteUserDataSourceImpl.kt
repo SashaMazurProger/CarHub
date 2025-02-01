@@ -20,6 +20,9 @@ class RemoteUserDataSourceImpl(private val api: CarHubApi) : UserDataSource {
     override fun login(email: String, password: String): Flow<AuthResult> =
         handleResponse(api.login(email, password))
 
+    override fun register(email: String, password: String): Flow<AuthResult> =
+        handleResponse(api.register(email, password))
+
     override suspend fun logout() {
         //
     }

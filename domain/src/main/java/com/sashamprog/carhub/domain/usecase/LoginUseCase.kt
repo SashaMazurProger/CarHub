@@ -12,4 +12,6 @@ class LoginUseCase(
     }
 
     fun isLoggedIn(): Boolean = userRepository.isLoggedIn()
+
+    fun register(email: String, password: String) = userRepository.register(email,password)
 }

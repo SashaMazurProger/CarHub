@@ -21,6 +21,7 @@ import com.sashamprog.carhub.ui.features.catalog.CatalogViewModel
 import com.sashamprog.carhub.ui.features.create_car.CreateEditCarViewModel
 import com.sashamprog.carhub.ui.features.account.AccountViewModel
 import com.sashamprog.carhub.ui.features.auth.AuthViewModel
+import com.sashamprog.carhub.ui.features.register.RegisterViewModel
 import org.koin.android.ext.koin.androidContext
 
 val appModule = module {
@@ -48,4 +49,5 @@ val appModule = module {
     viewModelOf(::AccountViewModel)
     viewModelOf(::AuthViewModel)
     viewModelOf(::CreateEditCarViewModel)
+    viewModelOf(::RegisterViewModel)
 }

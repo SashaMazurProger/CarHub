@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -62,6 +63,12 @@ fun AuthScreen(appController: NavController, onSuccessAuth: () -> Unit) {
 
         Button(onClick = { viewModel.login(email, password) }) {
             Text("Login")
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        TextButton(onClick = { appController.navigate("register") }) {
+            Text("Create account")
         }
 
         when (authState) {
